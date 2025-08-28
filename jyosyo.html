@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全商情報処理検定1級 ビジネス情報部門 重要語句クイズ</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', 'Arial', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        #quiz-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            overflow: hidden;
+            text-align: center;
+        }
+        #quiz-header, #result-container {
+            padding: 20px 30px;
+        }
+        h1 {
+            font-size: 1.5em;
+            margin: 0 0 10px 0;
+            color: #1c3d5a;
+        }
+        h2 {
+            font-size: 1.2em;
+        }
+        #question-number {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        #question {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            text-align: left;
+            padding: 0 20px;
+            line-height: 1.6;
+        }
+        #options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 0 20px 20px 20px;
+        }
+        .option-btn {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 1em;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .option-btn:hover:not(:disabled) {
+            background-color: #e9ecef;
+        }
+        .option-btn.correct {
+            background-color: #d1e7dd;
+            border-color: #a3cfbb;
+            color: #0a3622;
+            font-weight: bold;
+        }
+        .option-btn.incorrect {
+            background-color: #f8d7da;
+            border-color: #f1aeb5;
+            color: #58151c;
+        }
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+        #feedback-container {
+            padding: 0 20px 20px;
+            text-align: left;
+            border-top: 1px solid #eee;
+            margin-top: 20px;
+        }
+        #feedback-container h3 {
+            margin-top: 15px;
+        }
+        #feedback-text {
+            font-size: 1em;
+            line-height: 1.6;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #e7f3ff;
+            border-left: 5px solid #007bff;
+        }
+        #next-btn, #start-btn, #retry-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 20px;
+            transition: background-color 0.2s;
+        }
+        #next-btn:hover, #start-btn:hover, #retry-btn:hover {
+            background-color: #0056b3;
+        }
+        #start-container, #result-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="quiz-container">
+        <div id="start-container">
+            <h1>全商情報処理検定1級</h1>
+            <h2>ビジネス情報部門 重要語句クイズ</h2>
+            <p>下のボタンを押してクイズを開始してください。</p>
+            <button id="start-btn">クイズ開始</button>
+        </div>
+
+        <div id="quiz-screen" class="hidden">
+            <div id="quiz-header">
+                <div id="question-number"></div>
+            </div>
+            <p id="question"></p>
+            <div id="options-container"></div>
+            <div id="feedback-container" class="hidden">
+                <h3 id="feedback-title"></h3>
+                <p id="feedback-text"></p>
+            </div>
+            <button id="next-btn" class="hidden">次の問題へ</button>
+        </div>
+
+        <div id="result-container" class="hidden">
+            <h2>クイズ終了！</h2>
+            <p id="score">あなたのスコアは...</p>
+            <p id="result-message"></p>
+            <button id="retry-btn">もう一度挑戦する</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "システムに信頼性の高い部品の採用や、十分なテストを行うことで、故障の発生を防ぎ、信頼性を高める考え方を何と呼びますか？",
+                options: ["フォールトトレランス", "フォールトアボイダンス", "フェールセーフ", "フールプルーフ"],
+                answer: "フォールトアボイダンス",
+                explanation: "フォールトアボイダンスは、信頼性の高い部品の使用や十分なテストを通じて、そもそも故障が起こらないようにすることでシステムの信頼性を確保する考え方です。"
+            },
+            {
+                question: "信頼性や処理速度を向上させるために、複数のハードディスクを組み合わせて、全体を1つのディスク装置のように扱う方式を何と呼びますか？",
+                options: ["クラスタリング", "グリッドコンピューティング", "RAID", "NAS"],
+                answer: "RAID",
+                explanation: "RAIDは、Redundant Arrays of Inexpensive Disksの略で、複数のHDDをまとめて仮想的な1台のHDDとして運用する技術です。"
+            },
+            {
+                question: "インターネットのグローバルIPアドレスとプライベートIPアドレスを1対1で結びつけて相互に変換し、LAN内のコンピュータがインターネットを利用できるようにするためのアドレス変換技術を何と呼びますか？",
+                options: ["NAT", "DHCP", "DNS", "IPマスカレード"],
+                answer: "NAT",
+                explanation: "NATは、Network Address Translationの略で、プライベートIPアドレスとグローバルIPアドレスを相互に変換する技術です。"
+            },
+            {
+                question: "「非武装地帯」とも呼ばれ、外部ネットワークと内部ネットワークから隔離された区域のことを何と呼びますか？",
+                options: ["ハニーポット", "DMZ", "ファイアウォール", "VLAN"],
+                answer: "DMZ",
+                explanation: "DMZは、DeMilitarized Zoneの略で、非武装地帯を意味します。外部に公開するサーバーなどを設置するネットワーク領域です。"
+            },
+            {
+                question: "暗号化と復号に異なる鍵を使用する暗号方式を何と呼びますか？",
+                options: ["共通鍵暗号方式", "公開鍵暗号方式", "ハイブリッド暗号方式", "量子暗号"],
+                answer: "公開鍵暗号方式",
+                explanation: "公開鍵暗号方式では、送信者は受信者の公開鍵で暗号化し、受信者は自身の秘密鍵で復号します。このように異なる鍵ペアを使うのが特徴です。"
+            },
+            {
+                question: "公開鍵暗号方式を応用して、文書の作成者が本人であることと、その文書が改ざんされていないことを確認する技術を何と呼びますか？",
+                options: ["タイムスタンプ", "電子透かし", "電子署名", "認証局 (CA)"],
+                answer: "電子署名",
+                explanation: "電子署名は、送信者が自身の秘密鍵で作成した署名をデータに付与し、受信者は送信者の公開鍵で検証することで、本人性と非改ざん性を確認します。"
+            },
+            {
+                question: "Webページの脆弱性を利用して、悪意のあるスクリプトを埋め込み、ユーザーの情報を盗み出す攻撃を何と呼びますか？",
+                options: ["SQLインジェクション", "クロスサイトスクリプティング", "DoS攻撃", "フィッシング"],
+                answer: "クロスサイトスクリプティング",
+                explanation: "クロスサイトスクリプティングは、攻撃者が用意したスクリプトを、脆弱性のあるサイトを経由してユーザのブラウザ上で実行させる攻撃手法です。"
+            },
+            {
+                question: "情報通信技術を使わず、人間の心理的な隙や行動のミスにつけ込んで、情報を不正に収集する手口の総称を何と呼びますか？",
+                options: ["ブルートフォース攻撃", "マルウェア", "スパイウェア", "ソーシャルエンジリニアリング"],
+                answer: "ソーシャルエンジリニアリング",
+                explanation: "ソーシャルエンジニアリングには、電話でパスワードを聞き出したり（なりすまし）、肩越しにパスワードを盗み見たり（ショルダーハック）するなどの手口が含まれます。"
+            },
+            {
+                question: "Webアプリケーションの脆弱性を利用して、データベースへの命令文（SQL）を不正に実行させることで、データベースを改ざんしたり情報を盗み出したりする攻撃を何と呼びますか？",
+                options: ["クロスサイトリクエストフォージェリ", "OSコマンドインジェクション", "SQLインジェクション", "ディレクトリトラバーサル"],
+                answer: "SQLインジェクション",
+                explanation: "SQLインジェクションは、データベース言語であるSQLを「注入（インジェクション）」することで、不正な操作を行う攻撃手法です。"
+            },
+            {
+                question: "RAIDの構成レベルの一つで、複数のハードディスクに全く同じデータを書き込む方式を何と呼びますか？",
+                options: ["ストライピング (RAID 0)", "パリティ (RAID 5)", "ミラーリング (RAID 1)", "RAID 10 (RAID 1+0)"],
+                answer: "ミラーリング (RAID 1)",
+                explanation: "ミラーリング (RAID 1) は、1つのディスクが故障しても、もう一方のディスクで運用を継続できるため、耐障害性が非常に高いのが特徴です。"
+            }
+        ];
+
+        // 要素の取得
+        const startContainer = document.getElementById('start-container');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultContainer = document.getElementById('result-container');
+        const startBtn = document.getElementById('start-btn');
+        const retryBtn = document.getElementById('retry-btn');
+        const questionNumberEl = document.getElementById('question-number');
+        const questionEl = document.getElementById('question');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackContainer = document.getElementById('feedback-container');
+        const feedbackTitleEl = document.getElementById('feedback-title');
+        const feedbackTextEl = document.getElementById('feedback-text');
+        const nextBtn = document.getElementById('next-btn');
+        const scoreEl = document.getElementById('score');
+        const resultMessageEl = document.getElementById('result-message');
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let shuffledQuizData = [];
+
+        // イベントリスナー
+        startBtn.addEventListener('click', startQuiz);
+        nextBtn.addEventListener('click', nextQuestion);
+        retryBtn.addEventListener('click', startQuiz);
+
+        // クイズ開始処理
+        function startQuiz() {
+            startContainer.classList.add('hidden');
+            resultContainer.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            
+            currentQuestionIndex = 0;
+            score = 0;
+            shuffledQuizData = [...quizData].sort(() => Math.random() - 0.5); // 問題をシャッフル
+            displayQuestion();
+        }
+
+        // 問題表示処理
+        function displayQuestion() {
+            resetState();
+            const currentQuestion = shuffledQuizData[currentQuestionIndex];
+            questionNumberEl.textContent = `第 ${currentQuestionIndex + 1} 問`;
+            questionEl.textContent = currentQuestion.question;
+
+            // 選択肢をシャッフル
+            const shuffledOptions = [...currentQuestion.options].sort(() => Math.random() - 0.5);
+            
+            shuffledOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('option-btn');
+                button.addEventListener('click', selectAnswer);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // 状態リセット
+        function resetState() {
+            nextBtn.classList.add('hidden');
+            feedbackContainer.classList.add('hidden');
+            while (optionsContainer.firstChild) {
+                optionsContainer.removeChild(optionsContainer.firstChild);
+            }
+        }
+
+        // 解答選択処理
+        function selectAnswer(e) {
+            const selectedBtn = e.target;
+            const correct = selectedBtn.textContent === shuffledQuizData[currentQuestionIndex].answer;
+
+            if (correct) {
+                score++;
+                selectedBtn.classList.add('correct');
+                feedbackTitleEl.textContent = "正解！";
+            } else {
+                selectedBtn.classList.add('incorrect');
+                feedbackTitleEl.textContent = "不正解...";
+            }
+            
+            feedbackTextEl.textContent = shuffledQuizData[currentQuestionIndex].explanation;
+            feedbackContainer.classList.remove('hidden');
+
+            Array.from(optionsContainer.children).forEach(button => {
+                if (button.textContent === shuffledQuizData[currentQuestionIndex].answer) {
+                    button.classList.add('correct');
+                }
+                button.disabled = true;
+            });
+            
+            if (shuffledQuizData.length > currentQuestionIndex + 1) {
+                nextBtn.classList.remove('hidden');
+            } else {
+                nextBtn.textContent = '結果を見る';
+                nextBtn.classList.remove('hidden');
+                nextBtn.onclick = showResult;
+            }
+        }
+
+        // 次の問題へ
+        function nextQuestion() {
+            currentQuestionIndex++;
+            displayQuestion();
+        }
+
+        // 結果表示
+        function showResult() {
+            quizScreen.classList.add('hidden');
+            resultContainer.classList.remove('hidden');
+            scoreEl.textContent = `${shuffledQuizData.length}問中 ${score}問正解！`;
+            
+            let message = "";
+            const percentage = (score / shuffledQuizData.length) * 100;
+            if (percentage === 100) {
+                message = "素晴らしい！全問正解です！";
+            } else if (percentage >= 80) {
+                message = "おしい！あともう少しです！";
+            } else if (percentage >= 50) {
+                message = "よく頑張りました。繰り返し挑戦してみましょう！";
+            } else {
+                message = "まだまだ伸びしろがありますね！頑張りましょう！";
+            }
+            resultMessageEl.textContent = message;
+            
+            // イベントリスナーをリセット
+            nextBtn.textContent = '次の問題へ';
+            nextBtn.onclick = nextQuestion;
+        }
+
+    </script>
+</body>
+</html>
